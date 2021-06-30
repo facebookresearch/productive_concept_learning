@@ -1,0 +1,18 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+_mode: "eval"
+mem_requirement: 80GB
+splits: "cross_split & val"
+
+model_or_oracle_metrics: "model"
+eval_split_name: "val" # "val" or "test"
+
+eval_cfg:
+  write_raw_metrics: True
+  sort_validation_checkpoints: False
+  evaluate_all: False
+  evaluate_once: False
+  best_test_metric: "modelmap"

@@ -1,0 +1,17 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+input_dim: "5, 19"
+_data:
+  batch_size: 64
+  map_eval_batch_size: 8
+  modality: "json"
+
+_modality:
+  abs_pos_enc: False
+  use_batch_norm_rel_net: True  # This is actually enabling batch norm.
+
+opt:
+  lr: 1e-3

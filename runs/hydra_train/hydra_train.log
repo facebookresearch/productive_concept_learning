@@ -1,0 +1,483 @@
+[2021-06-30 07:59:45,366][root][INFO] - _data:
+  batch_size: 8
+  map_eval_batch_size: 8
+  modality: image
+_modality:
+  abs_pos_enc: true
+  use_batch_norm_rel_net: true
+_mode: train
+_model:
+  abs_pos_enc: true
+  obj_fdim: 64
+  pooling: concat
+  pooling_init: xavier
+  rel_pos_enc: false
+costly_loss:
+  class: losses.MetaLearningMeanAveragePrecision
+  name: map
+cross_split: ${data.num_positives}_0.10_hypotheses_heavy.json
+cross_split_hypothesis_image_mapping: ${data.num_positives}_0.10_image_hyp_mapping.json
+data:
+  dataset: adhoc_concepts
+  hypothesis_prior: log_linear
+  map_eval_num_images_per_concept: 3
+  negative_type: alternate_hypotheses
+  num_negatives: 20
+  num_positives: 5
+  path: ${raw_data.data_dir}/hypotheses/${filetype}
+  positive_threshold: 0.1
+  split_type: comp
+  train_examples: 500000
+data_args:
+  class: dataloaders.get_dataloader.GetDataloader
+  params:
+    splits: ${splits}
+device: cuda
+eval_split_name: val
+evaluate_once: false
+filetype: v2_typed_simple_fol_depth_6_trials_2000000_ban_1_max_scene_id_200
+input_dim: 3, 160, 240
+job_replica: 0
+loss:
+  class: losses.NegativeLogLikelihoodMultiTask
+  name: nll
+  params:
+    alpha: 0.1
+    num_classes: ${num_classes}
+    pad_token_idx: -10
+mem_requirement: 80GB
+model:
+  class: models.protonet.GetProtoNetModel
+  name: protonet
+  params:
+    absolute_position_encoding_for_modality: ${_modality.abs_pos_enc}
+    absolute_position_encoding_for_pooling: ${_model.abs_pos_enc}
+    feature_dim: 256
+    im_fg: true
+    init_to_use_pooling: ${_model.pooling_init}
+    input_dim: ${input_dim}
+    language_alpha: ${loss.params.alpha}
+    modality: ${_data.modality}
+    num_classes: ${num_classes}
+    obj_fdim: ${_model.obj_fdim}
+    pairwise_position_encoding: ${_model.rel_pos_enc}
+    pooling: ${_model.pooling}
+    pretrained_encoder: false
+    use_batch_norm_rel_net: ${_modality.use_batch_norm_rel_net}
+model_or_oracle_metrics: model
+num_classes: 2
+opt:
+  checkpoint_every: 30000
+  lr: 0.0001
+  lr_gamma: 0.5
+  lr_patience: 10
+  max_steps: 1000000
+  num_workers: 10
+  weight_decay: false
+qualitative: qualitative_eval_inputs_for_hierarchy.pkl
+raw_data:
+  audio_path: ${raw_data.data_dir}"/sound_scenes"
+  data_dir: ${env:CURI_DATA_PATH}
+  image_path: ${raw_data.data_dir}"/images"
+  json_path: ${raw_data.data_dir}"/scenes"
+  properties_file_path: ${env:PWD}/concept_data/clevr_typed_fol_properties.json
+splits: train & val
+test: ${data.split_type}_sampling_${data.hypothesis_prior}_test_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+train: ${data.split_type}_sampling_${data.hypothesis_prior}_train_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+val: ${data.split_type}_sampling_${data.hypothesis_prior}_val_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+
+[2021-06-30 07:59:45,367][root][INFO] - Base directory: /private/home/ramav/code/productive_concept_learning/runs/hydra_train
+[2021-06-30 07:59:45,368][root][INFO] - Loading dataset train.
+[2021-06-30 08:00:43,732][root][INFO] - 45 tokens found in the dataset.
+[2021-06-30 08:01:07,848][root][INFO] - Loading dataset val.
+[2021-06-30 08:01:23,857][root][INFO] - 45 tokens found in the dataset.
+[2021-06-30 08:01:32,139][hydra.utils][ERROR] - Error instantiating models.protonet.GetProtoNetModel : /private/home/ramav/anaconda3/lib/python3.7/site-packages/torchaudio/_torchaudio.so: undefined symbol: _ZNK3c104Type14isSubtypeOfExtERKSt10shared_ptrIS0_EPSo
+[2021-06-30 08:03:57,440][root][INFO] - _data:
+  batch_size: 8
+  map_eval_batch_size: 8
+  modality: image
+_modality:
+  abs_pos_enc: true
+  use_batch_norm_rel_net: true
+_mode: train
+_model:
+  abs_pos_enc: true
+  obj_fdim: 64
+  pooling: concat
+  pooling_init: xavier
+  rel_pos_enc: false
+costly_loss:
+  class: losses.MetaLearningMeanAveragePrecision
+  name: map
+cross_split: ${data.num_positives}_0.10_hypotheses_heavy.json
+cross_split_hypothesis_image_mapping: ${data.num_positives}_0.10_image_hyp_mapping.json
+data:
+  dataset: adhoc_concepts
+  hypothesis_prior: log_linear
+  map_eval_num_images_per_concept: 3
+  negative_type: alternate_hypotheses
+  num_negatives: 20
+  num_positives: 5
+  path: ${raw_data.data_dir}/hypotheses/${filetype}
+  positive_threshold: 0.1
+  split_type: comp
+  train_examples: 500000
+data_args:
+  class: dataloaders.get_dataloader.GetDataloader
+  params:
+    splits: ${splits}
+device: cuda
+eval_split_name: val
+evaluate_once: false
+filetype: v2_typed_simple_fol_depth_6_trials_2000000_ban_1_max_scene_id_200
+input_dim: 3, 160, 240
+job_replica: 0
+loss:
+  class: losses.NegativeLogLikelihoodMultiTask
+  name: nll
+  params:
+    alpha: 0.1
+    num_classes: ${num_classes}
+    pad_token_idx: -10
+mem_requirement: 80GB
+model:
+  class: models.protonet.GetProtoNetModel
+  name: protonet
+  params:
+    absolute_position_encoding_for_modality: ${_modality.abs_pos_enc}
+    absolute_position_encoding_for_pooling: ${_model.abs_pos_enc}
+    feature_dim: 256
+    im_fg: true
+    init_to_use_pooling: ${_model.pooling_init}
+    input_dim: ${input_dim}
+    language_alpha: ${loss.params.alpha}
+    modality: ${_data.modality}
+    num_classes: ${num_classes}
+    obj_fdim: ${_model.obj_fdim}
+    pairwise_position_encoding: ${_model.rel_pos_enc}
+    pooling: ${_model.pooling}
+    pretrained_encoder: false
+    use_batch_norm_rel_net: ${_modality.use_batch_norm_rel_net}
+model_or_oracle_metrics: model
+num_classes: 2
+opt:
+  checkpoint_every: 30000
+  lr: 0.0001
+  lr_gamma: 0.5
+  lr_patience: 10
+  max_steps: 1000000
+  num_workers: 10
+  weight_decay: false
+qualitative: qualitative_eval_inputs_for_hierarchy.pkl
+raw_data:
+  audio_path: ${raw_data.data_dir}"/sound_scenes"
+  data_dir: ${env:CURI_DATA_PATH}
+  image_path: ${raw_data.data_dir}"/images"
+  json_path: ${raw_data.data_dir}"/scenes"
+  properties_file_path: ${env:PWD}/concept_data/clevr_typed_fol_properties.json
+splits: train & val
+test: ${data.split_type}_sampling_${data.hypothesis_prior}_test_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+train: ${data.split_type}_sampling_${data.hypothesis_prior}_train_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+val: ${data.split_type}_sampling_${data.hypothesis_prior}_val_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+
+[2021-06-30 08:03:57,440][root][INFO] - Base directory: /private/home/ramav/code/productive_concept_learning/runs/hydra_train
+[2021-06-30 08:03:57,441][root][INFO] - Loading dataset train.
+[2021-06-30 08:04:55,384][root][INFO] - 45 tokens found in the dataset.
+[2021-06-30 08:05:19,537][root][INFO] - Loading dataset val.
+[2021-06-30 08:05:35,510][root][INFO] - 45 tokens found in the dataset.
+[2021-06-30 08:05:43,488][hydra.utils][ERROR] - Error instantiating models.protonet.GetProtoNetModel : No module named 'frozendict'
+[2021-06-30 08:10:47,529][root][INFO] - _data:
+  batch_size: 8
+  map_eval_batch_size: 8
+  modality: image
+_modality:
+  abs_pos_enc: true
+  use_batch_norm_rel_net: true
+_mode: train
+_model:
+  abs_pos_enc: true
+  obj_fdim: 64
+  pooling: concat
+  pooling_init: xavier
+  rel_pos_enc: false
+costly_loss:
+  class: losses.MetaLearningMeanAveragePrecision
+  name: map
+cross_split: ${data.num_positives}_0.10_hypotheses_heavy.json
+cross_split_hypothesis_image_mapping: ${data.num_positives}_0.10_image_hyp_mapping.json
+data:
+  dataset: adhoc_concepts
+  hypothesis_prior: log_linear
+  map_eval_num_images_per_concept: 3
+  negative_type: alternate_hypotheses
+  num_negatives: 20
+  num_positives: 5
+  path: ${raw_data.data_dir}/hypotheses/${filetype}
+  positive_threshold: 0.1
+  split_type: comp
+  train_examples: 500000
+data_args:
+  class: dataloaders.get_dataloader.GetDataloader
+  params:
+    splits: ${splits}
+device: cuda
+eval_split_name: val
+evaluate_once: false
+filetype: v2_typed_simple_fol_depth_6_trials_2000000_ban_1_max_scene_id_200
+input_dim: 3, 160, 240
+job_replica: 0
+loss:
+  class: losses.NegativeLogLikelihoodMultiTask
+  name: nll
+  params:
+    alpha: 0.1
+    num_classes: ${num_classes}
+    pad_token_idx: -10
+mem_requirement: 80GB
+model:
+  class: models.protonet.GetProtoNetModel
+  name: protonet
+  params:
+    absolute_position_encoding_for_modality: ${_modality.abs_pos_enc}
+    absolute_position_encoding_for_pooling: ${_model.abs_pos_enc}
+    feature_dim: 256
+    im_fg: true
+    init_to_use_pooling: ${_model.pooling_init}
+    input_dim: ${input_dim}
+    language_alpha: ${loss.params.alpha}
+    modality: ${_data.modality}
+    num_classes: ${num_classes}
+    obj_fdim: ${_model.obj_fdim}
+    pairwise_position_encoding: ${_model.rel_pos_enc}
+    pooling: ${_model.pooling}
+    pretrained_encoder: false
+    use_batch_norm_rel_net: ${_modality.use_batch_norm_rel_net}
+model_or_oracle_metrics: model
+num_classes: 2
+opt:
+  checkpoint_every: 30000
+  lr: 0.0001
+  lr_gamma: 0.5
+  lr_patience: 10
+  max_steps: 1000000
+  num_workers: 10
+  weight_decay: false
+qualitative: qualitative_eval_inputs_for_hierarchy.pkl
+raw_data:
+  audio_path: ${raw_data.data_dir}"/sound_scenes"
+  data_dir: ${env:CURI_DATA_PATH}
+  image_path: ${raw_data.data_dir}"/images"
+  json_path: ${raw_data.data_dir}"/scenes"
+  properties_file_path: ${env:PWD}/concept_data/clevr_typed_fol_properties.json
+splits: train & val
+test: ${data.split_type}_sampling_${data.hypothesis_prior}_test_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+train: ${data.split_type}_sampling_${data.hypothesis_prior}_train_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+val: ${data.split_type}_sampling_${data.hypothesis_prior}_val_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+
+[2021-06-30 08:10:47,529][root][INFO] - Base directory: /private/home/ramav/code/productive_concept_learning/runs/hydra_train
+[2021-06-30 08:10:47,530][root][INFO] - Loading dataset train.
+[2021-06-30 08:11:46,937][root][INFO] - 45 tokens found in the dataset.
+[2021-06-30 08:12:09,284][root][INFO] - Loading dataset val.
+[2021-06-30 08:12:26,104][root][INFO] - 45 tokens found in the dataset.
+[2021-06-30 08:12:34,123][hydra.utils][ERROR] - Error instantiating models.protonet.GetProtoNetModel : No module named 'fairseq'
+[2021-06-30 08:15:07,128][root][INFO] - _data:
+  batch_size: 8
+  map_eval_batch_size: 8
+  modality: image
+_modality:
+  abs_pos_enc: true
+  use_batch_norm_rel_net: true
+_mode: train
+_model:
+  abs_pos_enc: true
+  obj_fdim: 64
+  pooling: concat
+  pooling_init: xavier
+  rel_pos_enc: false
+costly_loss:
+  class: losses.MetaLearningMeanAveragePrecision
+  name: map
+cross_split: ${data.num_positives}_0.10_hypotheses_heavy.json
+cross_split_hypothesis_image_mapping: ${data.num_positives}_0.10_image_hyp_mapping.json
+data:
+  dataset: adhoc_concepts
+  hypothesis_prior: log_linear
+  map_eval_num_images_per_concept: 3
+  negative_type: alternate_hypotheses
+  num_negatives: 20
+  num_positives: 5
+  path: ${raw_data.data_dir}/hypotheses/${filetype}
+  positive_threshold: 0.1
+  split_type: comp
+  train_examples: 500000
+data_args:
+  class: dataloaders.get_dataloader.GetDataloader
+  params:
+    splits: ${splits}
+device: cuda
+eval_split_name: val
+evaluate_once: false
+filetype: v2_typed_simple_fol_depth_6_trials_2000000_ban_1_max_scene_id_200
+input_dim: 3, 160, 240
+job_replica: 0
+loss:
+  class: losses.NegativeLogLikelihoodMultiTask
+  name: nll
+  params:
+    alpha: 0.1
+    num_classes: ${num_classes}
+    pad_token_idx: -10
+mem_requirement: 80GB
+model:
+  class: models.protonet.GetProtoNetModel
+  name: protonet
+  params:
+    absolute_position_encoding_for_modality: ${_modality.abs_pos_enc}
+    absolute_position_encoding_for_pooling: ${_model.abs_pos_enc}
+    feature_dim: 256
+    im_fg: true
+    init_to_use_pooling: ${_model.pooling_init}
+    input_dim: ${input_dim}
+    language_alpha: ${loss.params.alpha}
+    modality: ${_data.modality}
+    num_classes: ${num_classes}
+    obj_fdim: ${_model.obj_fdim}
+    pairwise_position_encoding: ${_model.rel_pos_enc}
+    pooling: ${_model.pooling}
+    pretrained_encoder: false
+    use_batch_norm_rel_net: ${_modality.use_batch_norm_rel_net}
+model_or_oracle_metrics: model
+num_classes: 2
+opt:
+  checkpoint_every: 30000
+  lr: 0.0001
+  lr_gamma: 0.5
+  lr_patience: 10
+  max_steps: 1000000
+  num_workers: 10
+  weight_decay: false
+qualitative: qualitative_eval_inputs_for_hierarchy.pkl
+raw_data:
+  audio_path: ${raw_data.data_dir}"/sound_scenes"
+  data_dir: ${env:CURI_DATA_PATH}
+  image_path: ${raw_data.data_dir}"/images"
+  json_path: ${raw_data.data_dir}"/scenes"
+  properties_file_path: ${env:PWD}/concept_data/clevr_typed_fol_properties.json
+splits: train & val
+test: ${data.split_type}_sampling_${data.hypothesis_prior}_test_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+train: ${data.split_type}_sampling_${data.hypothesis_prior}_train_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+val: ${data.split_type}_sampling_${data.hypothesis_prior}_val_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+
+[2021-06-30 08:15:07,128][root][INFO] - Base directory: /private/home/ramav/code/productive_concept_learning/runs/hydra_train
+[2021-06-30 08:15:07,129][root][INFO] - Loading dataset train.
+[2021-06-30 08:16:05,748][root][INFO] - 45 tokens found in the dataset.
+[2021-06-30 08:16:28,927][root][INFO] - Loading dataset val.
+[2021-06-30 08:16:45,054][root][INFO] - 45 tokens found in the dataset.
+[2021-06-30 08:16:53,583][root][INFO] - Model has 5305773 trainable parameters.
+[2021-06-30 08:16:58,841][root][WARNING] - No checkpoint found to load from.
+[2021-06-30 08:17:06,310][root][INFO] - 9 step]: loss: 2.087838 (0.722422 sec per step)
+[2021-06-30 08:17:10,886][root][INFO] - 19 step]: loss: 2.915288 (0.433278 sec per step)
+[2021-06-30 08:17:15,459][root][INFO] - 29 step]: loss: 2.185799 (0.432571 sec per step)
+[2021-06-30 08:17:20,043][root][INFO] - 39 step]: loss: 1.792033 (0.433689 sec per step)
+[2021-06-30 08:17:24,624][root][INFO] - 49 step]: loss: 2.034118 (0.433574 sec per step)
+[2021-06-30 08:17:29,231][root][INFO] - 59 step]: loss: 2.378067 (0.436025 sec per step)
+[2021-06-30 08:17:33,857][root][INFO] - 69 step]: loss: 2.595036 (0.437972 sec per step)
+[2021-06-30 08:17:38,443][root][INFO] - 79 step]: loss: 1.464880 (0.433920 sec per step)
+[2021-06-30 08:17:43,054][root][INFO] - 89 step]: loss: 2.402642 (0.436592 sec per step)
+[2021-06-30 08:17:47,649][root][INFO] - 99 step]: loss: 2.459865 (0.434516 sec per step)
+[2021-06-30 08:17:52,227][root][INFO] - 109 step]: loss: 1.859175 (0.433180 sec per step)
+[2021-06-30 08:17:56,859][root][INFO] - 119 step]: loss: 2.000413 (0.438571 sec per step)
+[2021-06-30 08:18:01,476][root][INFO] - 129 step]: loss: 1.449102 (0.436543 sec per step)
+[2021-06-30 08:18:06,082][root][INFO] - 139 step]: loss: 1.986000 (0.435787 sec per step)
+[2021-06-30 08:18:10,674][root][INFO] - 149 step]: loss: 1.820911 (0.433784 sec per step)
+[2021-06-30 08:18:15,281][root][INFO] - 159 step]: loss: 1.732982 (0.435752 sec per step)
+[2021-06-30 08:18:19,885][root][INFO] - 169 step]: loss: 1.961681 (0.435543 sec per step)
+[2021-06-30 08:18:24,492][root][INFO] - 179 step]: loss: 1.709171 (0.435661 sec per step)
+[2021-06-30 08:18:29,117][root][INFO] - 189 step]: loss: 1.644497 (0.437341 sec per step)
+[2021-06-30 08:18:33,737][root][INFO] - 199 step]: loss: 1.101037 (0.437146 sec per step)
+[2021-06-30 08:18:38,371][root][INFO] - 209 step]: loss: 1.948574 (0.438507 sec per step)
+[2021-06-30 08:18:43,128][root][INFO] - 219 step]: loss: 1.401327 (0.450671 sec per step)
+[2021-06-30 08:18:47,723][root][INFO] - 229 step]: loss: 1.517174 (0.434367 sec per step)
+[2021-06-30 08:18:52,338][root][INFO] - 239 step]: loss: 1.191560 (0.436346 sec per step)
+[2021-06-30 08:18:56,950][root][INFO] - 249 step]: loss: 1.431217 (0.436296 sec per step)
+[2021-06-30 08:19:01,574][root][INFO] - 259 step]: loss: 1.949641 (0.437616 sec per step)
+[2021-06-30 08:19:06,219][root][INFO] - 269 step]: loss: 1.469898 (0.439927 sec per step)
+[2021-06-30 08:19:10,903][root][INFO] - 279 step]: loss: 2.087587 (0.441899 sec per step)
+[2021-06-30 08:19:15,538][root][INFO] - 289 step]: loss: 1.263609 (0.438302 sec per step)
+[2021-06-30 08:19:20,162][root][INFO] - 299 step]: loss: 1.100760 (0.437402 sec per step)
+[2021-06-30 08:19:24,847][root][INFO] - 309 step]: loss: 1.221637 (0.443951 sec per step)
+[2021-06-30 08:19:29,412][root][INFO] - 319 step]: loss: 0.955866 (0.431628 sec per step)
+[2021-06-30 08:19:34,035][root][INFO] - 329 step]: loss: 1.071989 (0.437237 sec per step)
+[2021-06-30 08:19:38,735][root][INFO] - 339 step]: loss: 1.016514 (0.441280 sec per step)
+[2021-06-30 08:19:43,393][root][INFO] - 349 step]: loss: 0.913749 (0.441100 sec per step)
+[2021-06-30 08:19:48,016][root][INFO] - 359 step]: loss: 1.339875 (0.437180 sec per step)
+[2021-06-30 08:19:52,650][root][INFO] - 369 step]: loss: 0.990149 (0.438073 sec per step)
+[2021-06-30 08:19:57,283][root][INFO] - 379 step]: loss: 1.131914 (0.438186 sec per step)
+[2021-06-30 08:20:01,950][root][INFO] - 389 step]: loss: 0.948836 (0.436945 sec per step)
+[2021-06-30 08:20:06,574][root][INFO] - 399 step]: loss: 0.975812 (0.437581 sec per step)
+[2021-06-30 08:20:11,137][root][INFO] - 409 step]: loss: 1.161713 (0.431342 sec per step)
+[2021-06-30 08:20:15,777][root][INFO] - 419 step]: loss: 0.829555 (0.438916 sec per step)
+[2021-06-30 08:20:20,366][root][INFO] - 429 step]: loss: 0.868156 (0.433629 sec per step)
+[2021-06-30 08:20:24,981][root][INFO] - 439 step]: loss: 0.936666 (0.436388 sec per step)
+[2021-06-30 08:20:29,600][root][INFO] - 449 step]: loss: 0.921424 (0.436695 sec per step)
+[2021-06-30 08:20:34,214][root][INFO] - 459 step]: loss: 0.849958 (0.436290 sec per step)
+[2021-06-30 08:20:38,839][root][INFO] - 469 step]: loss: 0.657778 (0.437270 sec per step)
+[2021-06-30 08:20:43,484][root][INFO] - 479 step]: loss: 0.858663 (0.439456 sec per step)
+[2021-06-30 08:20:48,102][root][INFO] - 489 step]: loss: 0.803646 (0.436873 sec per step)
+[2021-06-30 08:20:52,743][root][INFO] - 499 step]: loss: 0.383105 (0.439075 sec per step)
+[2021-06-30 08:20:57,367][root][INFO] - 509 step]: loss: 0.938491 (0.437249 sec per step)
+[2021-06-30 08:21:01,994][root][INFO] - 519 step]: loss: 0.736622 (0.437800 sec per step)
+[2021-06-30 08:21:06,612][root][INFO] - 529 step]: loss: 0.601789 (0.436222 sec per step)
+[2021-06-30 08:21:11,228][root][INFO] - 539 step]: loss: 0.682129 (0.436093 sec per step)
+[2021-06-30 08:21:15,845][root][INFO] - 549 step]: loss: 0.860348 (0.436450 sec per step)
+[2021-06-30 08:21:20,469][root][INFO] - 559 step]: loss: 0.705129 (0.437323 sec per step)
+[2021-06-30 08:21:25,087][root][INFO] - 569 step]: loss: 0.735584 (0.436922 sec per step)
+[2021-06-30 08:21:29,702][root][INFO] - 579 step]: loss: 0.687396 (0.436015 sec per step)
+[2021-06-30 08:21:34,499][root][INFO] - 589 step]: loss: 0.878977 (0.454200 sec per step)
+[2021-06-30 08:21:39,148][root][INFO] - 599 step]: loss: 0.702680 (0.439413 sec per step)
+[2021-06-30 08:21:43,771][root][INFO] - 609 step]: loss: 0.574517 (0.436742 sec per step)
+[2021-06-30 08:21:48,396][root][INFO] - 619 step]: loss: 0.758417 (0.437385 sec per step)
+[2021-06-30 08:21:53,099][root][INFO] - 629 step]: loss: 0.759227 (0.445556 sec per step)
+[2021-06-30 08:21:57,736][root][INFO] - 639 step]: loss: 0.571593 (0.438661 sec per step)
+[2021-06-30 08:22:02,448][root][INFO] - 649 step]: loss: 0.843235 (0.444923 sec per step)
+[2021-06-30 08:22:07,127][root][INFO] - 659 step]: loss: 0.636901 (0.442509 sec per step)
+[2021-06-30 08:22:11,742][root][INFO] - 669 step]: loss: 0.566094 (0.436135 sec per step)
+[2021-06-30 08:22:16,364][root][INFO] - 679 step]: loss: 0.601078 (0.436993 sec per step)
+[2021-06-30 08:22:20,964][root][INFO] - 689 step]: loss: 0.588032 (0.434618 sec per step)
+[2021-06-30 08:22:25,566][root][INFO] - 699 step]: loss: 0.768667 (0.434792 sec per step)
+[2021-06-30 08:22:30,140][root][INFO] - 709 step]: loss: 0.528999 (0.432889 sec per step)
+[2021-06-30 08:22:34,823][root][INFO] - 719 step]: loss: 0.558178 (0.442808 sec per step)
+[2021-06-30 08:22:39,401][root][INFO] - 729 step]: loss: 0.524066 (0.432589 sec per step)
+[2021-06-30 08:22:44,005][root][INFO] - 739 step]: loss: 0.802486 (0.435231 sec per step)
+[2021-06-30 08:22:48,778][root][INFO] - 749 step]: loss: 0.658497 (0.450737 sec per step)
+[2021-06-30 08:22:53,392][root][INFO] - 759 step]: loss: 0.556424 (0.435946 sec per step)
+[2021-06-30 08:22:58,010][root][INFO] - 769 step]: loss: 0.632716 (0.436407 sec per step)
+[2021-06-30 08:23:02,620][root][INFO] - 779 step]: loss: 0.513543 (0.435246 sec per step)
+[2021-06-30 08:23:07,240][root][INFO] - 789 step]: loss: 0.502689 (0.436919 sec per step)
+[2021-06-30 08:23:11,851][root][INFO] - 799 step]: loss: 0.516632 (0.435939 sec per step)
+[2021-06-30 08:23:16,572][root][INFO] - 809 step]: loss: 0.613643 (0.446745 sec per step)
+[2021-06-30 08:23:21,170][root][INFO] - 819 step]: loss: 0.680288 (0.434607 sec per step)
+[2021-06-30 08:23:25,779][root][INFO] - 829 step]: loss: 0.641541 (0.435594 sec per step)
+[2021-06-30 08:23:30,387][root][INFO] - 839 step]: loss: 0.474919 (0.435189 sec per step)
+[2021-06-30 08:23:35,032][root][INFO] - 849 step]: loss: 0.480498 (0.439302 sec per step)
+[2021-06-30 08:23:39,645][root][INFO] - 859 step]: loss: 0.677614 (0.435995 sec per step)
+[2021-06-30 08:23:44,261][root][INFO] - 869 step]: loss: 0.614037 (0.436589 sec per step)
+[2021-06-30 08:23:48,922][root][INFO] - 879 step]: loss: 0.485261 (0.439536 sec per step)
+[2021-06-30 08:23:53,479][root][INFO] - 889 step]: loss: 0.601304 (0.430920 sec per step)
+[2021-06-30 08:23:58,056][root][INFO] - 899 step]: loss: 0.608004 (0.432820 sec per step)
+[2021-06-30 08:24:02,647][root][INFO] - 909 step]: loss: 0.548361 (0.433679 sec per step)
+[2021-06-30 08:24:07,272][root][INFO] - 919 step]: loss: 0.546175 (0.437175 sec per step)
+[2021-06-30 08:24:11,928][root][INFO] - 929 step]: loss: 0.606726 (0.440442 sec per step)
+[2021-06-30 08:24:16,622][root][INFO] - 939 step]: loss: 0.499567 (0.439479 sec per step)
+[2021-06-30 08:24:21,225][root][INFO] - 949 step]: loss: 0.680117 (0.435164 sec per step)
+[2021-06-30 08:24:25,826][root][INFO] - 959 step]: loss: 0.630478 (0.434797 sec per step)
+[2021-06-30 08:24:30,413][root][INFO] - 969 step]: loss: 0.659538 (0.433633 sec per step)
+[2021-06-30 08:24:35,029][root][INFO] - 979 step]: loss: 0.600808 (0.436187 sec per step)
+[2021-06-30 08:24:39,624][root][INFO] - 989 step]: loss: 0.515091 (0.434492 sec per step)
+[2021-06-30 08:24:44,277][root][INFO] - 999 step]: loss: 0.404778 (0.440104 sec per step)
+[2021-06-30 08:24:48,875][root][INFO] - 1009 step]: loss: 0.559842 (0.434560 sec per step)
+[2021-06-30 08:24:53,498][root][INFO] - 1019 step]: loss: 0.342333 (0.436492 sec per step)
+[2021-06-30 08:24:58,105][root][INFO] - 1029 step]: loss: 0.491634 (0.435391 sec per step)
+[2021-06-30 08:25:02,707][root][INFO] - 1039 step]: loss: 0.612390 (0.434721 sec per step)
+[2021-06-30 08:25:07,306][root][INFO] - 1049 step]: loss: 0.417880 (0.434672 sec per step)
+[2021-06-30 08:25:11,895][root][INFO] - 1059 step]: loss: 0.507488 (0.433570 sec per step)

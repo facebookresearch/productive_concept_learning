@@ -1,0 +1,14 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+_mode: "train"
+mem_requirement: 80GB 
+splits: "train & val"
+
+# Unused, just needs to be there.
+eval_split_name: "val" # "val" or "test"
+
+model_or_oracle_metrics: "model"
+evaluate_once: False

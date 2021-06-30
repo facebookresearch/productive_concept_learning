@@ -1,0 +1,145 @@
+hydra:
+  help:
+    app_name: ${hydra.job.name}
+    footer: 'Powered by Hydra (https://cli.dev)
+
+      Use --hydra-help to view Hydra specific help
+
+      '
+    header: '${hydra.help.app_name} is powered by Hydra.
+
+      '
+    template: '${hydra.help.header}
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (group=option)
+
+
+      $APP_CONFIG_GROUPS
+
+
+      == Config ==
+
+      Override anything in the config (foo.bar=value)
+
+
+      $CONFIG
+
+
+      ${hydra.help.footer}
+
+      '
+  hydra_help:
+    template: 'Hydra (${hydra.runtime.version})
+
+      See https://cli.dev for more info.
+
+
+      == Flags ==
+
+      $FLAGS_HELP
+
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (For example, append hydra/job_logging=disabled
+      to command line)
+
+
+      $HYDRA_CONFIG_GROUPS
+
+
+      Use ''--cfg hydra'' to Show the Hydra config.'
+  hydra_logging:
+    disable_existing_loggers: false
+    formatters:
+      simple:
+        format: '[%(asctime)s][HYDRA] %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+    loggers:
+      logging_example:
+        level: DEBUG
+    root:
+      handlers:
+      - console
+      level: INFO
+    version: 1
+  job:
+    config:
+      override_dirname:
+        exclude_keys:
+        - job_replica
+        - mode
+        - opt.max_steps
+        - opt.checkpoint_every
+        - model_or_oracle_metrics
+        - eval_cfg.evaluate_once
+        - val
+        - splits
+        - eval_split_name
+        - test
+        - train
+        - eval_cfg.write_raw_metrics
+        - eval_cfg.evaluate_all
+        - eval_cfg.best_test_metric
+        - eval_cfg.sort_validation_checkpoints
+        item_sep: ','
+        kv_sep: '='
+    config_file: experiment.yaml
+    id: ???
+    name: hydra_train
+    num: ???
+    override_dirname: ''
+  job_logging:
+    disable_existing_loggers: false
+    formatters:
+      simple:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+      file:
+        class: logging.FileHandler
+        filename: ${hydra.job.name}.log
+        formatter: simple
+    root:
+      handlers:
+      - console
+      - file
+      level: INFO
+    version: 1
+  launcher:
+    class: hydra._internal.core_plugins.basic_launcher.BasicLauncher
+    params:
+      queue_parameters:
+        slurm:
+          additional_parameters:
+            constraint: ''
+          job_name: ${hydra.job.name}_${_mode}
+          max_num_timeout: 10
+          mem: ${mem_requirement}
+          partition: learnfair
+          time: 4300
+  output_subdir: .hydra
+  overrides:
+    hydra: []
+    task:
+    - mode=train
+  run:
+    dir: ${env:RUN_DIR}/${hydra.job.name}/${hydra.job.override_dirname}
+  runtime:
+    cwd: /private/home/ramav/code/productive_concept_learning
+    version: 0.11.0
+  sweep:
+    dir: ${env:RUN_DIR}/${hydra.job.name}
+    subdir: ${hydra.job.override_dirname}/${job_replica}
+  sweeper:
+    class: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+  verbose: false

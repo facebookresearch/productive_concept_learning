@@ -1,0 +1,11 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+_model:
+  pooling: "rel_net"
+  abs_pos_enc: False
+  rel_pos_enc: True 
+  obj_fdim: 64 # Only for sound and image
+  pooling_init: "xavier"

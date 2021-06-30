@@ -1,0 +1,102 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+defaults:
+  # Expects to see this as the name of the folder containing the dataset.
+  - data_files: v2_typed_simple_fol_depth_6_trials_2000000_ban_1_max_scene_id_200
+  - task: adhoc_concepts
+  - modality: image
+  - pooling: concat
+  - mode: train
+  - special_rules: ${defaults.2.modality}_${defaults.3.pooling}
+    optional: true
+
+# Points to the raw images, jsons, sounds etc.
+raw_data:
+  data_dir: ${env:CURI_DATA_PATH}
+  image_path: ${raw_data.data_dir}"/images"
+  json_path: ${raw_data.data_dir}"/scenes"
+  audio_path: ${raw_data.data_dir}"/sound_scenes"
+  properties_file_path: ${env:PWD}/concept_data/clevr_typed_fol_properties.json
+
+data:
+  dataset: "adhoc_concepts"
+  split_type: "comp"
+  negative_type: "alternate_hypotheses" # Only "alternate_hypothesis", "random"
+  train_examples: 500000
+  path: ${raw_data.data_dir}/hypotheses/${filetype}
+  hypothesis_prior: "log_linear"
+  num_negatives: 20
+  num_positives: 5
+  positive_threshold: 0.10  # Needs to be in %.2f format. TODO(ramav): Remove hardcoding of this.
+  map_eval_num_images_per_concept: 3
+
+data_args:
+  class: dataloaders.get_dataloader.GetDataloader
+  params:
+    splits: ${splits}
+
+model:
+  name: protonet
+  class: models.protonet.GetProtoNetModel
+  params:
+    feature_dim: 256
+    obj_fdim: ${_model.obj_fdim}
+    pooling: ${_model.pooling} # "global_average_pooling" Or "rel_net" Or "concat" Or "trnsf"
+    modality: ${_data.modality}
+    pretrained_encoder: False
+    num_classes: ${num_classes}
+    language_alpha: ${loss.params.alpha}
+    input_dim: ${input_dim}
+    init_to_use_pooling: ${_model.pooling_init}
+    use_batch_norm_rel_net: ${_modality.use_batch_norm_rel_net}
+    pairwise_position_encoding: ${_model.rel_pos_enc}
+    absolute_position_encoding_for_pooling: ${_model.abs_pos_enc}
+    absolute_position_encoding_for_modality: ${_modality.abs_pos_enc}
+    im_fg: True 
+
+opt:
+  max_steps: 1000000
+  checkpoint_every: 30000
+  lr_gamma: 0.5
+  lr_patience: 10
+  num_workers: 10
+  weight_decay: False
+
+loss:
+  name: "nll"
+  class: losses.NegativeLogLikelihoodMultiTask
+  params:
+    alpha: 0.1
+    pad_token_idx: -10 # Will always be determined at runtime.
+    num_classes: ${num_classes}
+
+costly_loss:
+  name: "map"
+  class: losses.MetaLearningMeanAveragePrecision
+
+device: "cuda"
+
+job_replica: 0 # Used to set the replica for running multiple jobs with same params.
+
+hydra:
+  sweep:
+    dir: ${env:RUN_DIR}/${hydra.job.name}
+    subdir: ${hydra.job.override_dirname}/${job_replica}
+
+  job:
+    config:
+      override_dirname:
+        exclude_keys: ["job_replica", "mode", "opt.max_steps",
+          "opt.checkpoint_every", "model_or_oracle_metrics",
+          "eval_cfg.evaluate_once", "val",
+          "splits", "eval_split_name",
+          "test", "train", "eval_cfg.write_raw_metrics",
+          "eval_cfg.evaluate_all", "eval_cfg.best_test_metric",
+          "eval_cfg.sort_validation_checkpoints"
+          ]
+
+  run: 
+    dir: ${env:RUN_DIR}/${hydra.job.name}/${hydra.job.override_dirname}

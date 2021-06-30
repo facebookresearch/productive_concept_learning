@@ -1,0 +1,212 @@
+{
+    "grammar": {
+        "START": [
+            "lambda S. #BOOL# exists=",
+            "lambda S. #BOOL# for-all="
+        ],
+        "BOOL": [
+            [
+                [
+                    "#BOOL# #BOOL# and",
+                    "+"
+                ],
+                [
+                    "#BOOL# #BOOL# or",
+                    "-"
+                ],
+                [
+                    "#BOOL# not",
+                    "*"
+                ],
+                [
+                    "#C# #C# =",
+                    "+"
+                ],
+                [
+                    "#SH# #SH# =",
+                    "+"
+                ],
+                [
+                    "#M# #M# =",
+                    "+"
+                ],
+                [
+                    "#SI# #SI# =",
+                    "-"
+                ],
+                [
+                    "#L# #L# =",
+                    "-"
+                ],
+                [
+                    "#NUM# #NUM# =",
+                    "-"
+                ],
+                [
+                    "#SI# #SI# >",
+                    "*"
+                ],
+                [
+                    "#L# #L# >",
+                    "*"
+                ],
+                [
+                    "#NUM# #NUM# >",
+                    "*"
+                ],
+                [
+                    "#SETFC# #C# for-all=",
+                    "*"
+                ],
+                [
+                    "#SETFSH# #SH# for-all=",
+                    "*"
+                ],
+                [
+                    "#SETFM# #M# for-all=",
+                    "*"
+                ],
+                [
+                    "#SETFSI# #SI# for-all=",
+                    "*"
+                ],
+                [
+                    "#SETFL# #L# for-all=",
+                    "*"
+                ],
+                [
+                    "#SETFC# #C# exists=",
+                    "*"
+                ],
+                [
+                    "#SETFSH# #SH# exists=",
+                    "*"
+                ],
+                [
+                    "#SETFM# #M# exists=",
+                    "*"
+                ],
+                [
+                    "#SETFSI# #SI# exists=",
+                    "*"
+                ],
+                [
+                    "#SETFL# #L# exists=",
+                    "*"
+                ]
+            ]
+        ],
+        "NUM": [
+            [
+                "#SETFC# #C# count=",
+                "#SETFSH# #SH# count=",
+                "#SETFM# #M# count=",
+                "#SETFSI# #SI# count=",
+                "#SETFL# #L# count="
+            ],
+            [
+                "1",
+                "2",
+                "3"
+            ]
+        ],
+        "SETFC": "#SET# #FC#",
+        "SETFSH": "#SET# #FSH#",
+        "SETFM": "#SET# #FM#",
+        "SETFSI": "#SET# #FSI#",
+        "SETFL": "#SET# #FL#",
+        "C": [
+            [
+                "gray",
+                "red",
+                "blue",
+                "green",
+                "brown",
+                "purple",
+                "cyan",
+                "yellow"
+            ],
+            [
+                "#OBJECT# #FC#"
+            ]
+        ],
+        "SH": [
+            [
+                "cube",
+                "sphere",
+                "cylinder"
+            ],
+            [
+                "#OBJECT# #FSH#"
+            ]
+        ],
+        "M": [
+            [
+                "rubber",
+                "metal"
+            ],
+            [
+                "#OBJECT# #FM#"
+            ]
+        ],
+        "SI": [
+            [
+                "large",
+                "small"
+            ],
+            [
+                "#OBJECT# #FSI#"
+            ]
+        ],
+        "L": [
+            [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8"
+            ],
+            [
+                "#OBJECT# #FL#"
+            ]
+        ],
+        "FC": "color?",
+        "FSH": "shape?",
+        "FM": "material?",
+        "FSI": "size?",
+        "FL": [
+            "locationX?",
+            "locationY?"
+        ],
+        "OBJECT": "x",
+        "SET": [
+            [
+                [
+                    "S",
+                    "*"
+                ],
+                [
+                    "non-x-S",
+                    "*"
+                ]
+            ]
+        ]
+    },
+    "metadata": {
+        "variables": [
+            "x",
+            "S",
+            "non-x-S"
+        ],
+        "functions": [
+            "FC",
+            "FSH",
+            "FM",
+            "FSI",
+            "FL"
+        ]
+    }
+}

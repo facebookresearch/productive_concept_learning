@@ -1,0 +1,3 @@
+[submodule "clevr-dataset-gen"]
+	path = clevr-dataset-gen
+	url = https://github.com/facebookresearch/clevr-dataset-gen

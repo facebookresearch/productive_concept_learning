@@ -1,0 +1,32 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+filetype: v2_typed_simple_fol_depth_6_trials_2000000_ban_1_max_scene_id_200
+
+train: "${data.split_type}_sampling_${data.hypothesis_prior}_train_threshold_\
+  0.10_pos_im_${data.num_positives}_neg\
+  _im_${data.num_negatives}_train_examples_${data.train_examples}\
+  _neg_type_${data.negative_type}_\
+  alternate_hypo_1_random_seed_42.pkl"
+  
+val: "${data.split_type}_sampling_${data.hypothesis_prior}_val_threshold_\
+  0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_\
+  ${data.train_examples}_neg_type_${data.negative_type}_\
+  alternate_hypo_1_random_seed_42.pkl"
+
+test: "${data.split_type}_sampling_${data.hypothesis_prior}_test\
+  _threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_\
+  ${data.train_examples}_neg_type_${data.negative_type}\
+  _alternate_hypo_1_random_seed_42.pkl"
+
+qualitative: "qualitative_eval_inputs_for_hierarchy.pkl"
+
+cross_split: "${data.num_positives}_0.10_hypotheses_heavy.json"
+cross_split_hypothesis_image_mapping: "${data.num_positives}_0.10_image_hyp_mapping.json"

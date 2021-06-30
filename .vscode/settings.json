@@ -1,0 +1,10 @@
+{
+  "python.pythonPath": "/private/home/ramav/anaconda3/bin/python",
+  "python.formatting.provider": "yapf",
+  "editor.rulers": [
+    80,
+    120
+  ],
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true
+}

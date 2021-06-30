@@ -1,0 +1,87 @@
+_data:
+  batch_size: 8
+  map_eval_batch_size: 8
+  modality: image
+_modality:
+  abs_pos_enc: true
+  use_batch_norm_rel_net: true
+_mode: train
+_model:
+  abs_pos_enc: true
+  obj_fdim: 64
+  pooling: concat
+  pooling_init: xavier
+  rel_pos_enc: false
+costly_loss:
+  class: losses.MetaLearningMeanAveragePrecision
+  name: map
+cross_split: ${data.num_positives}_0.10_hypotheses_heavy.json
+cross_split_hypothesis_image_mapping: ${data.num_positives}_0.10_image_hyp_mapping.json
+data:
+  dataset: adhoc_concepts
+  hypothesis_prior: log_linear
+  map_eval_num_images_per_concept: 3
+  negative_type: alternate_hypotheses
+  num_negatives: 20
+  num_positives: 5
+  path: ${raw_data.data_dir}/hypotheses/${filetype}
+  positive_threshold: 0.1
+  split_type: comp
+  train_examples: 500000
+data_args:
+  class: dataloaders.get_dataloader.GetDataloader
+  params:
+    splits: ${splits}
+device: cuda
+eval_split_name: val
+evaluate_once: false
+filetype: v2_typed_simple_fol_depth_6_trials_2000000_ban_1_max_scene_id_200
+input_dim: 3, 160, 240
+job_replica: 0
+loss:
+  class: losses.NegativeLogLikelihoodMultiTask
+  name: nll
+  params:
+    alpha: 0.1
+    num_classes: ${num_classes}
+    pad_token_idx: -10
+mem_requirement: 80GB
+model:
+  class: models.protonet.GetProtoNetModel
+  name: protonet
+  params:
+    absolute_position_encoding_for_modality: ${_modality.abs_pos_enc}
+    absolute_position_encoding_for_pooling: ${_model.abs_pos_enc}
+    feature_dim: 256
+    im_fg: true
+    init_to_use_pooling: ${_model.pooling_init}
+    input_dim: ${input_dim}
+    language_alpha: ${loss.params.alpha}
+    modality: ${_data.modality}
+    num_classes: ${num_classes}
+    obj_fdim: ${_model.obj_fdim}
+    pairwise_position_encoding: ${_model.rel_pos_enc}
+    pooling: ${_model.pooling}
+    pretrained_encoder: false
+    use_batch_norm_rel_net: ${_modality.use_batch_norm_rel_net}
+model_or_oracle_metrics: model
+num_classes: 2
+opt:
+  checkpoint_every: 30000
+  lr: 0.0001
+  lr_gamma: 0.5
+  lr_patience: 10
+  max_steps: 1000000
+  num_workers: 10
+  weight_decay: false
+qualitative: qualitative_eval_inputs_for_hierarchy.pkl
+raw_data:
+  audio_path: ${raw_data.data_dir}"/sound_scenes"
+  data_dir: ${env:CURI_DATA_PATH}
+  image_path: ${raw_data.data_dir}"/images"
+  json_path: ${raw_data.data_dir}"/scenes"
+  properties_file_path: ${env:PWD}/concept_data/clevr_typed_fol_properties.json
+splits: train & val
+test: ${data.split_type}_sampling_${data.hypothesis_prior}_test_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+train: ${data.split_type}_sampling_${data.hypothesis_prior}_train_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
+val: ${data.split_type}_sampling_${data.hypothesis_prior}_val_threshold_0.10_pos_im_${data.num_positives}_neg_im_${data.num_negatives}_train_examples_${data.train_examples}_neg_type_${data.negative_type}_alternate_hypo_1_random_seed_42.pkl
