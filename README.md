@@ -53,7 +53,7 @@ Run `source install.sh` to install all the dependencies for the project.
 Run the following command to download the CURI dataset:
 
 ```
-wget https://dl.fbaipublicfiles.com/CURI/curi_v0.2 -P /path/to/dataset
+wget https://dl.fbaipublicfiles.com/CURI/curi_v0.2.tar.gz -P /path/to/dataset
 ```
 The dataset itself is very large ~200GB after decompressing
 so please ensure there is enough storage
@@ -62,7 +62,7 @@ where you are downloading it to hold the dataset.
 Uncompress the following files:
 
 ```
-cd /path/to/dataset/curi_v0.2
+cd /path/to/dataset/curi_release
 tar -xvf images_200.tar.gz
 tar -xvf scenes_200.tar.gz
 ```
@@ -73,7 +73,7 @@ Before we train the models we need to set the following two paths in `paths.sh`:
 
 * First set `${RUN_DIR}=/path/to/runs` to set where we want to store the results
 of the sweeps on the models.
-* Set `${CURI_DATASET_PATH}` variable in file `paths.sh` to `/path/to/dataset/curi_v0.2`
+* Set `${CURI_DATASET_PATH}` variable in file `paths.sh` to `/path/to/dataset/curi_release`
 * Run `source paths.sh`
 
 ### Training a model
